@@ -1,0 +1,9 @@
+node_modules/*
+typings/*
+npm-debug.log
+.settings/*
+.git/*
+bower_components/*
+src/**/*.js
+src/**/*.map
+
