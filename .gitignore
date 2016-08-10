@@ -6,4 +6,6 @@ npm-debug.log
 bower_components/*
 src/**/*.js
 src/**/*.map
+dist
+.idea
 
