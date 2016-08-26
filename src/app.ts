@@ -1,13 +1,13 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as multer from "multer";
-import * as mongoose from 'mongoose';
-import * as gridfs from 'gridfs-stream';
-import * as fs from 'fs';
+import * as mongoose from "mongoose";
+import * as gridfs from "gridfs-stream";
+import * as fs from "fs";
 import {DataFile} from "./models";
-import {AuthenticationService} from './middleware';
-import * as JSONStream from "JSONStream";
-import { decode } from "jsonwebtoken";
+import {AuthenticationService} from "./middleware";
+import {decode} from "jsonwebtoken";
+var formattedStream = require('formatted-stream').default;
 
 var app = express();
 
@@ -46,12 +46,14 @@ app.post("/upload", uploadConfig.single('dataFile'), (req:express.Request, res:e
     var gfs = gridfs(mongoose.connection.db, mongoose.mongo);
     var writeStream = gfs.createWriteStream();
 
-    var readStream = fs.createReadStream(req.file.path).pipe(JSONStream.parse(""));
-    readStream.on("close", ()=> {
-        fs.createReadStream(req.file.path).pipe(writeStream);
-    });
+    const parser = formattedStream.from('csv'),
+        writer = formattedStream.to('json');
 
-    readStream.on("error", e => res.status(406).send("Invalid JSON!"));
+    parser.pipe(writer);
+    writer.pipe(writeStream);
+    var readStream = fs.createReadStream(req.file.path).pipe(parser);
+
+    readStream.on("error", e => res.status(406).send("Invalid CSV"));
 
     writeStream.on('close', file => {
         var tags = req.body.tags.split(",");
