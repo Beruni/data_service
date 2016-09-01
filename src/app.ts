@@ -73,6 +73,27 @@ app.get("/fetchFiles", function(request, response){
     });
 });
 
+app.get("/fetchFile/:fileId", function(request, response){
+    var gfs = gridfs(mongoose.connection.db, mongoose.mongo);
+    var fileId = request.param('fileId');
+    var readStream = gfs.createReadStream({
+        _id: fileId
+    });
+    var content = "";
+
+    readStream.on('data',(data) => {
+        content += data;
+    });
+
+    readStream.on('close',()=>{
+        response.status(200).end(JSON.stringify(content));
+    });
+
+    readStream.on('error',e => {
+        response.status(500).end(JSON.stringify(e.message));
+    });
+});
+
 app.get('/ping',function (req,res) {
     res.end("pong")
 });
