@@ -18,10 +18,12 @@ export class NodeDiscoveryService {
         }
       }).on('error', function(error) {
           console.log('Got discovery error: ' + error.message);
+          response['discovery_service'].discoveryDataCache = [];
           next();
       });
       request.end();
     } else {
+      this.discoveryDataCache = [];
       next();
     }
   }
@@ -31,7 +33,7 @@ export class NodeDiscoveryService {
   }
 
   clearDiscoveryDataCache() {
-    this.discoveryDataCache = [];
+    this.discoveryDataCache = null;
   }
 
   serviceParams(serviceName: string) {

@@ -11,7 +11,7 @@ export class AuthenticationService {
     }
 
     authenticate(response:express.Response, next:any) {
-        // response['authentication_service'] = this;
+        response['authentication_service'] = this;
         var request = httpClient.request(this.userServiceGetCurrentUserParams(response), (userResponse) => {
             console.log('Got status: ' + userResponse.statusCode);
             if (userResponse.statusCode == 200) {
@@ -36,14 +36,14 @@ export class AuthenticationService {
     }
 
     userServiceGetCurrentUserParams(response:express.Response) {
-        // var discoveryService = response['discovery_service'];
-        // var params = discoveryService.serviceParams('user_service');
-        // var hostname = params ? params['ServiceAddress'] : '127.0.0.1';
-        // var port = params ? params['ServicePort'] : '3000';
+        var discoveryService = response['discovery_service'];
+        var params = discoveryService.serviceParams('user_service');
+        var hostname = params ? params['ServiceAddress'] : '127.0.0.1';
+        var port = params ? params['ServicePort'] : '3000';
         return {
             method: 'GET',
-            hostname: '127.0.0.1',
-            port: 3001,
+            hostname: hostname,
+            port: port,
             path: '/current_user',
             headers: {"authorization": this.userToken}
         };

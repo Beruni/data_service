@@ -5,7 +5,7 @@ import * as mongoose from "mongoose";
 import * as gridfs from "gridfs-stream";
 import * as fs from "fs";
 import {DataFile} from "./models";
-import {AuthenticationService} from "./middleware";
+import {AuthenticationService, NodeDiscoveryService} from "./middleware";
 import {decode} from "jsonwebtoken";
 var formattedStream = require('formatted-stream').default;
 
@@ -25,12 +25,11 @@ app.use((req:express.Request, res:express.Response, next:express.NextFunction) =
     next();
 });
 
-// var serviceDiscovery = new middleware.NodeDiscoveryService();
-// app.use(function(req, res, next) {
-//     serviceDiscovery.fetchNodeServers(res, next);
-// });
-//
-//
+var serviceDiscovery = new NodeDiscoveryService();
+app.use(function(req, res, next) {
+    serviceDiscovery.fetchNodeServers(res, next);
+});
+
 app.use(function(req, res, next) {
     if (req.method == 'OPTIONS') {
         next()
