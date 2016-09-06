@@ -5,7 +5,7 @@ export class NodeDiscoveryService {
   discoveryDataCache;
   fetchNodeServers(response:express.Response, next: any) {
     response['discovery_service'] = this;
-    if(!this.discoveryDataCache && process.env.DISCOVERY_SERVICE_HOST) {
+    if(!this.discoveryDataCache) {
       var request = httpClient.request(this.getNodeServerUrlParams(),function(discoveryResponse){
         if(discoveryResponse.statusCode == 200) {
           discoveryResponse.on('data', function(discoveryData) {
@@ -36,8 +36,6 @@ export class NodeDiscoveryService {
   }
 
   serviceParams(serviceName: string) {
-    if(!this.discoveryDataCache)
-      return null;
     return this.discoveryDataCache.find(function(entry: JSON) {
       return entry['ServiceID'].match(serviceName);
     });
