@@ -7,5 +7,6 @@ bower_components/*
 src/**/*.js
 src/**/*.map
 dist
+uploads
 .idea
 
