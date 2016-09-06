@@ -23,7 +23,6 @@ export class NodeDiscoveryService {
       });
       request.end();
     } else {
-      this.discoveryDataCache = [];
       next();
     }
   }
