@@ -28,7 +28,7 @@ export class NodeDiscoveryService {
   }
 
   getNodeServerUrlParams() {
-    return {method: 'GET', hostname: process.env.DISCOVERY_SERVICE_HOST, port: 8500, path: '/v1/catalog/service/node'};
+    return {method: 'GET', hostname: process.env.DISCOVERY_SERVICE_HOST, port: process.env.DISCOVERY_SERVICE_PORT, path: process.env.DISCOVERY_SERVICE_PATH};
   }
 
   clearDiscoveryDataCache() {
