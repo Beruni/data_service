@@ -1,0 +1,26 @@
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - test
+  - build
+  - deploy
+
+unit_test:
+  stage: test
+  script:
+    - deploy/unit_test.sh
+
+build_app:
+  stage: build
+  script:
+    - deploy/compile_app.sh
+    - deploy/build_docker_image.sh
+
+deploy_staging:
+  stage: deploy
+  script:
+    - deploy/push_to_heroku.sh
+  variables:
+    CUSTOM_ENVIRONMENT: "staging-"
