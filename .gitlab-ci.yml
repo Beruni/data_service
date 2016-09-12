@@ -6,6 +6,7 @@ stages:
   - test
   - build
   - deploy
+  - release # enable this if you intend to release to prod
 
 unit_test:
   stage: test
@@ -24,3 +25,9 @@ deploy_staging:
     - deploy/push_to_heroku.sh
   variables:
     CUSTOM_ENVIRONMENT: "staging-"
+
+deploy:
+  environment: production
+  stage: release
+  script:
+    - deploy/push_to_heroku.sh
